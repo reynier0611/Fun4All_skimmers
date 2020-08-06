@@ -12,8 +12,10 @@ using namespace std;
 
 int main(int argc, char ** argv) {
 
-	if(argc!=3){
-		cout << "--------------------------------------\nRun this code as:\n./skimmer /path/to/file/ filename\n--------------------------------------" << endl;
+	if(argc!=4){
+		cout << "--------------------------------------\nRun this code as:\n./skimmer /path/to/file/ filename A\n\n";
+		cout << "A = 1 -> Include both momentum and vertex information\n  = 2 -> Only include momentum information" << endl;
+		cout << "--------------------------------------" << endl;
 		return 0;
 	}
 
@@ -47,9 +49,11 @@ int main(int argc, char ** argv) {
 	Tout -> Branch("px"   ,&px   ,"px/F"   );
 	Tout -> Branch("py"   ,&py   ,"py/F"   );
 	Tout -> Branch("pz"   ,&pz   ,"pz/F"   );
-	Tout -> Branch("gvz"  ,&gvz  ,"gvz/F"  );
-	Tout -> Branch("pcaz" ,&pcaz ,"pcaz/F" );
-	Tout -> Branch("dca2d",&dca2d,"dca2d/F");
+	if(atoi(argv[3])==1){
+		Tout -> Branch("gvz"  ,&gvz  ,"gvz/F"  );
+		Tout -> Branch("pcaz" ,&pcaz ,"pcaz/F" );
+		Tout -> Branch("dca2d",&dca2d,"dca2d/F");
+	}
 
 	// looping over entries
 	for(int evt = 0 ; evt < nEntries ; evt++){
