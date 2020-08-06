@@ -1,6 +1,7 @@
 #include "TFile.h"
 #include "TString.h"
 #include "TTree.h"
+#include "TLorentzVector.h"
 
 #include <fstream>
 #include <cstdlib>
@@ -18,6 +19,15 @@ int main(int argc, char ** argv) {
 		cout << "--------------------------------------" << endl;
                 return 0;
         }
+	TString added_name = "";
+	// -------------------------------
+	// Beam energy
+	float beam_E = 20.0; // GeV
+	if(atoi(argv[3])==2){
+		cout << "\033[1;31mWARNING!!!: Assuming electron beam energy = " << beam_E << " GeV\033[0m" << endl;
+		added_name = "Q2_lt_1GeV2_";
+	}
+	// -------------------------------
 
 	// input file
 	TString dir = argv[1];
@@ -141,7 +151,7 @@ int main(int argc, char ** argv) {
 	int nEntries = Tin -> GetEntries();
 
 	// output file
-	TFile * Fout = new TFile(dir+"skimmed_"+common_name,"recreate");
+	TFile * Fout = new TFile(dir+"skimmed_"+added_name+common_name,"recreate");
 	TTree * Tout = new TTree("T","skimmed tree");
 	Tout->Branch("event"                          ,&event                                 , "event/I"                                         );
 	Tout->Branch("njets"                          ,&njets                                 , "njets/I"                                         );
@@ -195,6 +205,16 @@ int main(int argc, char ** argv) {
 	for(int evt = 0 ; evt < nEntries ; evt++){
 		if(evt%10000==0) cout << evt << "\tout of " << nEntries << endl;	
 		Tin -> GetEntry(evt);
+
+		// -------------------------------
+		// Calculate Q^2
+ 		TLorentzVector e_vec;
+		e_vec.SetPtEtaPhiE(electron_truthPt, electron_truthEta, electron_truthPhi, electron_truthE);
+		float Q2 = 2. * beam_E * e_vec.E() * (1 - TMath::Abs(e_vec.CosTheta()));
+		
+		if (atoi(argv[3])==2 && Q2>1) continue;
+	
+		// -------------------------------
 		
 		for(int i = 0 ; i < 20 ; i++){ // Loop over jets
 			for(int j = 0 ; j < 100 ; j++){ // Loop over constituents	
