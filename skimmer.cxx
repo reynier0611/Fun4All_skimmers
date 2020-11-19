@@ -14,7 +14,8 @@ int main(int argc, char ** argv) {
 
 	if(argc!=4){
 		cout << "--------------------------------------\nRun this code as:\n./skimmer /path/to/file/ filename A\n\n";
-		cout << "A = 1 -> Include both momentum and vertex information\n  = 2 -> Only include momentum information" << endl;
+		cout << "A = 1 -> Include both momentum and vertex information\n  = 2 -> Only include momentum information";
+		cout << "\n  = 3 -> Include information needed for projections" << endl;
 		cout << "--------------------------------------" << endl;
 		return 0;
 	}
@@ -23,7 +24,7 @@ int main(int argc, char ** argv) {
 	TString common_name = argv[1];
 	common_name += argv[2];
 	cout << "Skimming file: " << common_name << endl;
-	
+
 	TFile * Fin = new TFile(common_name);
 	TTree * Tin = (TTree*) Fin -> Get("tracks");
 	float gpx, gpy, gpz, px, py, pz, gvz, pcaz, dca2d;
@@ -36,6 +37,31 @@ int main(int argc, char ** argv) {
 	Tin -> SetBranchAddress("gvz"  ,&gvz  );
 	Tin -> SetBranchAddress("pcaz" ,&pcaz );
 	Tin -> SetBranchAddress("dca2d",&dca2d);
+
+	int trackID;
+	float DIRC_px, DIRC_py, DIRC_pz, DIRC_proj_px, DIRC_proj_py, DIRC_proj_pz,
+	      FOR_px, FOR_py, FOR_pz, FOR_proj_px, FOR_proj_py, FOR_proj_pz,
+	      BACK_px, BACK_py, BACK_pz, BACK_proj_px, BACK_proj_py, BACK_proj_pz;
+
+	Tin -> SetBranchAddress("trackID"      ,&trackID      );
+	Tin -> SetBranchAddress("DIRC_px"      ,&DIRC_px      );
+	Tin -> SetBranchAddress("DIRC_py"      ,&DIRC_py      );
+	Tin -> SetBranchAddress("DIRC_pz"      ,&DIRC_pz      );
+	Tin -> SetBranchAddress("DIRC_proj_px" ,&DIRC_proj_px );
+	Tin -> SetBranchAddress("DIRC_proj_py" ,&DIRC_proj_py );
+	Tin -> SetBranchAddress("DIRC_proj_pz" ,&DIRC_proj_pz );
+	Tin -> SetBranchAddress("FOR_px"       ,&FOR_px       );
+	Tin -> SetBranchAddress("FOR_py"       ,&FOR_py       );
+	Tin -> SetBranchAddress("FOR_pz"       ,&FOR_pz       );
+	Tin -> SetBranchAddress("FOR_proj_px"  ,&FOR_proj_px  );
+	Tin -> SetBranchAddress("FOR_proj_py"  ,&FOR_proj_py  );
+	Tin -> SetBranchAddress("FOR_proj_pz"  ,&FOR_proj_pz  );
+	Tin -> SetBranchAddress("BACK_px"      ,&BACK_px      );
+	Tin -> SetBranchAddress("BACK_py"      ,&BACK_py      );
+	Tin -> SetBranchAddress("BACK_pz"      ,&BACK_pz      );
+	Tin -> SetBranchAddress("BACK_proj_px" ,&BACK_proj_px );
+	Tin -> SetBranchAddress("BACK_proj_py" ,&BACK_proj_py );
+	Tin -> SetBranchAddress("BACK_proj_pz" ,&BACK_proj_pz );
 	int nEntries = Tin -> GetEntries();
 
 	// output file
@@ -54,6 +80,27 @@ int main(int argc, char ** argv) {
 		Tout -> Branch("pcaz" ,&pcaz ,"pcaz/F" );
 		Tout -> Branch("dca2d",&dca2d,"dca2d/F");
 	}
+	else if(atoi(argv[3])==3){
+		Tout -> Branch("trackID"      ,&trackID     ,"trackID/I"     );
+		Tout -> Branch("DIRC_px"      ,&DIRC_px     ,"DIRC_px/F"     );
+		Tout -> Branch("DIRC_py"      ,&DIRC_py     ,"DIRC_py/F"     );
+		Tout -> Branch("DIRC_pz"      ,&DIRC_pz     ,"DIRC_pz/F"     );
+		Tout -> Branch("DIRC_proj_px" ,&DIRC_proj_px,"DIRC_proj_px/F");
+		Tout -> Branch("DIRC_proj_py" ,&DIRC_proj_py,"DIRC_proj_py/F");
+		Tout -> Branch("DIRC_proj_pz" ,&DIRC_proj_pz,"DIRC_proj_pz/F");
+		Tout -> Branch("FOR_px"       ,&FOR_px      ,"FOR_px/F"      );
+		Tout -> Branch("FOR_py"       ,&FOR_py      ,"FOR_py/F"      );
+		Tout -> Branch("FOR_pz"       ,&FOR_pz      ,"FOR_pz/F"      );
+		Tout -> Branch("FOR_proj_px"  ,&FOR_proj_px ,"FOR_proj_px/F" );
+		Tout -> Branch("FOR_proj_py"  ,&FOR_proj_py ,"FOR_proj_py/F" );
+		Tout -> Branch("FOR_proj_pz"  ,&FOR_proj_pz ,"FOR_proj_pz/F" );
+		Tout -> Branch("BACK_px"      ,&BACK_px     ,"BACK_px/F"     );
+		Tout -> Branch("BACK_py"      ,&BACK_py     ,"BACK_py/F"     );
+		Tout -> Branch("BACK_pz"      ,&BACK_pz     ,"BACK_pz/F"     );
+		Tout -> Branch("BACK_proj_px" ,&BACK_proj_px,"BACK_proj_px/F");
+		Tout -> Branch("BACK_proj_py" ,&BACK_proj_py,"BACK_proj_py/F");
+		Tout -> Branch("BACK_proj_pz" ,&BACK_proj_pz,"BACK_proj_pz/F");
+	}
 
 	// looping over entries
 	for(int evt = 0 ; evt < nEntries ; evt++){
@@ -64,6 +111,6 @@ int main(int argc, char ** argv) {
 	Tout -> Write();
 	Fout -> Close();
 	Fin -> Close();
-	
+
 	return 0;
 }
