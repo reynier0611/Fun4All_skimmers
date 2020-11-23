@@ -43,25 +43,28 @@ int main(int argc, char ** argv) {
 	      FOR_px, FOR_py, FOR_pz, FOR_proj_px, FOR_proj_py, FOR_proj_pz,
 	      BACK_px, BACK_py, BACK_pz, BACK_proj_px, BACK_proj_py, BACK_proj_pz;
 
-	Tin -> SetBranchAddress("trackID"      ,&trackID      );
-	Tin -> SetBranchAddress("DIRC_px"      ,&DIRC_px      );
-	Tin -> SetBranchAddress("DIRC_py"      ,&DIRC_py      );
-	Tin -> SetBranchAddress("DIRC_pz"      ,&DIRC_pz      );
-	Tin -> SetBranchAddress("DIRC_proj_px" ,&DIRC_proj_px );
-	Tin -> SetBranchAddress("DIRC_proj_py" ,&DIRC_proj_py );
-	Tin -> SetBranchAddress("DIRC_proj_pz" ,&DIRC_proj_pz );
-	Tin -> SetBranchAddress("FOR_px"       ,&FOR_px       );
-	Tin -> SetBranchAddress("FOR_py"       ,&FOR_py       );
-	Tin -> SetBranchAddress("FOR_pz"       ,&FOR_pz       );
-	Tin -> SetBranchAddress("FOR_proj_px"  ,&FOR_proj_px  );
-	Tin -> SetBranchAddress("FOR_proj_py"  ,&FOR_proj_py  );
-	Tin -> SetBranchAddress("FOR_proj_pz"  ,&FOR_proj_pz  );
-	Tin -> SetBranchAddress("BACK_px"      ,&BACK_px      );
-	Tin -> SetBranchAddress("BACK_py"      ,&BACK_py      );
-	Tin -> SetBranchAddress("BACK_pz"      ,&BACK_pz      );
-	Tin -> SetBranchAddress("BACK_proj_px" ,&BACK_proj_px );
-	Tin -> SetBranchAddress("BACK_proj_py" ,&BACK_proj_py );
-	Tin -> SetBranchAddress("BACK_proj_pz" ,&BACK_proj_pz );
+	if(atoi(argv[3])==3){
+		Tin -> SetBranchAddress("trackID"      ,&trackID      );
+		Tin -> SetBranchAddress("DIRC_px"      ,&DIRC_px      );
+		Tin -> SetBranchAddress("DIRC_py"      ,&DIRC_py      );
+		Tin -> SetBranchAddress("DIRC_pz"      ,&DIRC_pz      );
+		Tin -> SetBranchAddress("DIRC_proj_px" ,&DIRC_proj_px );
+		Tin -> SetBranchAddress("DIRC_proj_py" ,&DIRC_proj_py );
+		Tin -> SetBranchAddress("DIRC_proj_pz" ,&DIRC_proj_pz );
+		Tin -> SetBranchAddress("FOR_px"       ,&FOR_px       );
+		Tin -> SetBranchAddress("FOR_py"       ,&FOR_py       );
+		Tin -> SetBranchAddress("FOR_pz"       ,&FOR_pz       );
+		Tin -> SetBranchAddress("FOR_proj_px"  ,&FOR_proj_px  );
+		Tin -> SetBranchAddress("FOR_proj_py"  ,&FOR_proj_py  );
+		Tin -> SetBranchAddress("FOR_proj_pz"  ,&FOR_proj_pz  );
+		Tin -> SetBranchAddress("BACK_px"      ,&BACK_px      );
+		Tin -> SetBranchAddress("BACK_py"      ,&BACK_py      );
+		Tin -> SetBranchAddress("BACK_pz"      ,&BACK_pz      );
+		Tin -> SetBranchAddress("BACK_proj_px" ,&BACK_proj_px );
+		Tin -> SetBranchAddress("BACK_proj_py" ,&BACK_proj_py );
+		Tin -> SetBranchAddress("BACK_proj_pz" ,&BACK_proj_pz );
+	}
+
 	int nEntries = Tin -> GetEntries();
 
 	// output file
