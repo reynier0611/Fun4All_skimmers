@@ -15,7 +15,8 @@ int main(int argc, char ** argv) {
 	if(argc!=4){
 		cout << "--------------------------------------\nRun this code as:\n./skimmer /path/to/file/ filename A\n\n";
 		cout << "A = 1 -> Include both momentum and vertex information\n  = 2 -> Only include momentum information";
-		cout << "\n  = 3 -> Include information needed for projections" << endl;
+		cout << "\n  = 3 -> Include information needed for projections";
+		cout << "\n  = 4 -> Include everything in the 'tracks' tree" << endl;
 		cout << "--------------------------------------" << endl;
 		return 0;
 	}
@@ -43,7 +44,7 @@ int main(int argc, char ** argv) {
 	      FOR_px, FOR_py, FOR_pz, FOR_proj_px, FOR_proj_py, FOR_proj_pz,
 	      BACK_px, BACK_py, BACK_pz, BACK_proj_px, BACK_proj_py, BACK_proj_pz;
 
-	if(atoi(argv[3])==3){
+	if(atoi(argv[3])>=3){
 		Tin -> SetBranchAddress("trackID"      ,&trackID      );
 		Tin -> SetBranchAddress("DIRC_px"      ,&DIRC_px      );
 		Tin -> SetBranchAddress("DIRC_py"      ,&DIRC_py      );
@@ -84,6 +85,30 @@ int main(int argc, char ** argv) {
 		Tout -> Branch("dca2d",&dca2d,"dca2d/F");
 	}
 	else if(atoi(argv[3])==3){
+		Tout -> Branch("trackID"      ,&trackID     ,"trackID/I"     );
+		Tout -> Branch("DIRC_px"      ,&DIRC_px     ,"DIRC_px/F"     );
+		Tout -> Branch("DIRC_py"      ,&DIRC_py     ,"DIRC_py/F"     );
+		Tout -> Branch("DIRC_pz"      ,&DIRC_pz     ,"DIRC_pz/F"     );
+		Tout -> Branch("DIRC_proj_px" ,&DIRC_proj_px,"DIRC_proj_px/F");
+		Tout -> Branch("DIRC_proj_py" ,&DIRC_proj_py,"DIRC_proj_py/F");
+		Tout -> Branch("DIRC_proj_pz" ,&DIRC_proj_pz,"DIRC_proj_pz/F");
+		Tout -> Branch("FOR_px"       ,&FOR_px      ,"FOR_px/F"      );
+		Tout -> Branch("FOR_py"       ,&FOR_py      ,"FOR_py/F"      );
+		Tout -> Branch("FOR_pz"       ,&FOR_pz      ,"FOR_pz/F"      );
+		Tout -> Branch("FOR_proj_px"  ,&FOR_proj_px ,"FOR_proj_px/F" );
+		Tout -> Branch("FOR_proj_py"  ,&FOR_proj_py ,"FOR_proj_py/F" );
+		Tout -> Branch("FOR_proj_pz"  ,&FOR_proj_pz ,"FOR_proj_pz/F" );
+		Tout -> Branch("BACK_px"      ,&BACK_px     ,"BACK_px/F"     );
+		Tout -> Branch("BACK_py"      ,&BACK_py     ,"BACK_py/F"     );
+		Tout -> Branch("BACK_pz"      ,&BACK_pz     ,"BACK_pz/F"     );
+		Tout -> Branch("BACK_proj_px" ,&BACK_proj_px,"BACK_proj_px/F");
+		Tout -> Branch("BACK_proj_py" ,&BACK_proj_py,"BACK_proj_py/F");
+		Tout -> Branch("BACK_proj_pz" ,&BACK_proj_pz,"BACK_proj_pz/F");
+	}
+	else if(atoi(argv[3])==4){
+		Tout -> Branch("gvz"  ,&gvz  ,"gvz/F"  );
+		Tout -> Branch("pcaz" ,&pcaz ,"pcaz/F" );
+		Tout -> Branch("dca2d",&dca2d,"dca2d/F");
 		Tout -> Branch("trackID"      ,&trackID     ,"trackID/I"     );
 		Tout -> Branch("DIRC_px"      ,&DIRC_px     ,"DIRC_px/F"     );
 		Tout -> Branch("DIRC_py"      ,&DIRC_py     ,"DIRC_py/F"     );
